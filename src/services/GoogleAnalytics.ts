@@ -29,13 +29,15 @@ type ProductAction =
 
 export class GoogleAnalytics {
     private trackingId: string;
-    private protocolVersion: number = 1;
-    private params: {[key: string]: any} = {};
+    private protocolVersion: number;
+    private params: GoogleAnalyticsParam;
     private clientId: string;
 
     constructor(trackingId: string) {
         this.trackingId = trackingId;
         this.clientId = "";
+        this.params = {};
+        this.protocolVersion = 1;
     }
 
     public anonymizeIp(anonymize: boolean) {
@@ -229,5 +231,8 @@ export class GoogleAnalytics {
     public setCustomDimension(dimensionIndex: number, value: string) {}
     public setCustomMetric(metricIndex: number, value: number) {}
 
-    public setContentExperiment(experimentId: string, experimentVariant: string) {}
+    public setContentExperiment(
+        experimentId: string,
+        experimentVariant: string
+    ) {}
 }

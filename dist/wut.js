@@ -131,10 +131,10 @@ exports.Wut = Wut;
 Object.defineProperty(exports, "__esModule", { value: true });
 var GoogleAnalytics = /** @class */ (function () {
     function GoogleAnalytics(trackingId) {
-        this.protocolVersion = 1;
-        this.params = {};
         this.trackingId = trackingId;
         this.clientId = "";
+        this.params = {};
+        this.protocolVersion = 1;
     }
     GoogleAnalytics.prototype.anonymizeIp = function (anonymize) {
         if (anonymize) {
