@@ -1,28 +1,29 @@
 {
-  "name": "wut",
-  "version": "1.0.0",
-  "description": "Analytic Library",
-  "main": "index.js",
-  "scripts": {
-    "dev": "webpack --watch --progress --mode=development",
-    "build": "webpack --mode=production",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hising/wut.js.git"
-  },
-  "author": "Mattias Hising <mattias@yetric.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hising/wut.js/issues"
-  },
-  "homepage": "https://github.com/hising/wut.js#readme",
-  "devDependencies": {
-    "clean-webpack-plugin": "^2.0.0",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3333",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3"
-  }
+    "name": "wut",
+    "version": "1.0.0",
+    "description": "Analytic Library",
+    "main": "index.js",
+    "scripts": {
+        "dev": "webpack --watch --progress --mode=development",
+        "build": "webpack --mode=production",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hising/wut.js.git"
+    },
+    "author": "Mattias Hising <mattias@yetric.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/hising/wut.js/issues"
+    },
+    "homepage": "https://github.com/hising/wut.js#readme",
+    "devDependencies": {
+        "clean-webpack-plugin": "^2.0.0",
+        "prettier": "^1.16.4",
+        "ts-loader": "^5.3.3",
+        "typescript": "^3.3.3333",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.2.3"
+    }
 }
