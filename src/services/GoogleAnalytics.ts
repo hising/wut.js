@@ -1,3 +1,5 @@
+import {HttpClient} from "../http/client";
+
 interface GoogleAnalyticsParam {
     [key: string]: any;
 }
@@ -6,6 +8,8 @@ interface ViewArea {
     width: number;
     height: number;
 }
+
+type HttpMethod = "post" | "get";
 
 type HitType =
     | "pageview"
@@ -27,28 +31,152 @@ type ProductAction =
     | "purchase"
     | "refund";
 
+
+enum GaParams {
+    ProtocolVersion = "v",
+    TrackingId = "tid",
+    ClientId = "cid",
+    HitType = "t",
+    AnonymizeIP = "aip",
+    DataSource = "ds",
+    QueueTime = "qt",
+    CacheBuster = "z",
+    UserId = "uid",
+    SessionControl = "sc",
+    IPOverride = "uip",
+    UserAgentOverride = "ua",
+    GeoOverride = "geoid",
+    DocumentReferrer = "dr",
+    CampaignName = "cn",
+    CampaignSource = "cs",
+    CampaignMedium = "cm",
+    CampaignKeyword = "ck",
+    CampaignContent = "cc",
+    CampaignId = "ci",
+    GoogleAdsId = "gclid",
+    GoogleDisplayAdsId = "dclid",
+    ScreenResolution = "sr",
+    ViewportSize = "vp",
+    DocumentEncoding = "de",
+    ScreenColors = "sd",
+    UserLanguage = "ul",
+    JavaEnabled = "je",
+    FlashVersion = "fl",
+    NonInteractionHit = "ni",
+    DocumentLocationURL = "dl",
+    DocumentHostName = "dh",
+    DocumentPath = "dp",
+    DocumentTitle = "dt",
+    ScreenName = "cd",
+    ContentGroup = "cg%d",
+    LinkId = "linkid",
+    ApplicationName = "an",
+    ApplicationID = "aid",
+    ApplicationVersion = "av",
+    ApplicationInstallerID = "aiid",
+    EventCategory = "ec",
+    EventAction = "ea",
+    EventLabel = "el",
+    EventValue = "ev",
+    TransactionID = "ti",
+    TransactionAffiliation = "ta",
+    TransactionRevenue = "tr",
+    TransactionShipping = "ts",
+    TransactionTax = "tt",
+    ItemName = "in",
+    ItemPrice = "ip",
+    ItemQuantity = "iq",
+    ItemCode = "ic",
+    ItemCategory = "iv",
+    ProductSKU = "pr%did",
+    ProductName = "pr%dnm",
+    ProductBrand = "pr%dbr",
+    ProductCategory = "pr%dca",
+    ProductVariant = "pr%dva",
+    ProductPrice = "pr%dpr",
+    ProductQuantity = "pr%dqt",
+    ProductCouponCode = "pr%dcc",
+    ProductPosition = "pr%dps",
+    ProductCustomDimension = "pr%dcd%d",
+    ProductCustomMetric = "pr%dcm%d",
+    ProductAction = "pa",
+    CouponCode = "tcc",
+    ProductActionList = "pal",
+    CheckoutStep = "cos",
+    CheckoutStepOption = "col",
+    ProductImpressionListName = "il%dnm",
+    ProductImpressionSKU = "il%dpi%did",
+    ProductImpressionName = "il%dpi%dnm",
+    ProductImpressionBrand = "il%dpi%dbr",
+    ProductImpressionCategory = "il%dpi%dca",
+    ProductImpressionVariant = "il%dpi%dva",
+    ProductImpressionPosition = "il%dpi%dps",
+    ProductImpressionPrice = "il%dpi%dpr",
+    ProductImpressionCustomDimension = "il%dpi%dcd%d",
+    ProductImpressionCustomMetric = "il%dpi%dcm%d",
+    PromotionId = ""
+};
+
 export class GoogleAnalytics {
-    private trackingId: string;
-    private protocolVersion: number;
-    private params: GoogleAnalyticsParam;
+    get trackingId(): string {
+        return this._trackingId;
+    }
+
+    set trackingId(value: string) {
+        this._trackingId = value;
+    }
+    get protocolVersion(): number {
+        return this._protocolVersion;
+    }
+
+    set protocolVersion(value: number) {
+        this._protocolVersion = value;
+    }
+    private _trackingId: string;
+    private _protocolVersion: number;
+    private readonly params: GoogleAnalyticsParam;
+    private readonly transient: GoogleAnalyticsParam;
     private clientId: string;
+    private endpoint: string;
+    private client: HttpClient;
+    private method: HttpMethod;
 
     constructor(trackingId: string) {
-        this.trackingId = trackingId;
+        this._trackingId = trackingId;
         this.clientId = "";
         this.params = {};
-        this.protocolVersion = 1;
+        this.transient = {};
+        this._protocolVersion = 1;
+        this.endpoint = "https://www.google-analytics.com/collect";
+        this.client = new HttpClient();
+        this.method = "post";
+
+        this.params = {
+            [GaParams.TrackingId]: trackingId,
+            [GaParams.ProtocolVersion]: this._protocolVersion
+        };
     }
 
     public anonymizeIp(anonymize: boolean) {
         if (anonymize) {
-            this.params["aip"] = 1;
-        } else if (this.params.hasOwnProperty("aip")) {
+            this.params[GaParams.AnonymizeIP] = 1;
+        } else if (this.params.hasOwnProperty(GaParams.AnonymizeIP)) {
             delete this.params.aip;
         }
     }
 
-    public setCacheBuster() {}
+    public send() {
+        // If POST - Payload no longer than 8192 bytes
+        // IF GET - encoded URL must be no longer than 8000 Bytes
+    }
+
+    public setCacheBuster() {
+        this.transient[GaParams.CacheBuster] = Math.round(new Date().getTime() / 1000);
+    }
+
+    public optOut(isOptOut: boolean) {
+
+    }
 
     public trackEvent(
         eventCategory: string,
@@ -56,12 +184,32 @@ export class GoogleAnalytics {
         eventLabel?: string,
         eventValue?: number
     ) {}
-    public trackPageView() {}
-    public trackScreenView() {}
+
+    public trackPageView(path?: string, url?: string, title?: string) {}
+
+    public trackScreenView(screenName: string) {}
+    public trackSocialInteraction(
+        network: string,
+        action: string,
+        target: string
+    ) {}
+    public setUserTiming(
+        category: string,
+        variable: string,
+        timeMs: number,
+        label?: string
+    ) {}
+    public trackException(description: string, fatal?: boolean) {}
+
+    public setCustomDimension(dimensionIndex: number, value: string) {}
+    public setCustomMetric(metricIndex: number, value: number) {}
+
     public setClientId() {}
     public setUserId() {}
 
-    public startSession() {}
+    public startSession() {
+
+    }
     public endSession() {}
 
     public overrideIpAddress(ipAddress: string) {}
@@ -210,13 +358,6 @@ export class GoogleAnalytics {
     public setSocialNetwork(socialNetwork: string) {}
     public setSocialAction(socialAction: string) {}
     public setSocialActionTarget(socialActionTarget: string) {}
-
-    public setUserTiming(
-        timingCategory: string,
-        timingVariable: string,
-        timingTimeMs: number,
-        timingLabel?: string
-    ) {}
     public setPageLoadTime(pageLoadTimeMs: number) {}
     public setDNSLookupTime(dnsLookupTimeMs: number) {}
     public setPageDownloadTime(downloadTimeMs: number) {}
@@ -225,12 +366,6 @@ export class GoogleAnalytics {
     public setServerResponseTime(serverResponseTimeMs: number) {}
     public setDOMInteractiveTime(domInteractiveTimeMs: number) {}
     public setContentLoadTime(contentLoadTimeMs: number) {}
-
-    public setException(exceptionDescription: string, isFatal?: boolean) {}
-
-    public setCustomDimension(dimensionIndex: number, value: string) {}
-    public setCustomMetric(metricIndex: number, value: number) {}
-
     public setContentExperiment(
         experimentId: string,
         experimentVariant: string

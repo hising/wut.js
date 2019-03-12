@@ -8,13 +8,22 @@ export declare class GoogleAnalytics {
     private trackingId;
     private protocolVersion;
     private params;
+    private transient;
     private clientId;
+    private endpoint;
     constructor(trackingId: string);
     anonymizeIp(anonymize: boolean): void;
+    send(): void;
     setCacheBuster(): void;
+    optOut(isOptOut: boolean): void;
     trackEvent(eventCategory: string, eventAction: string, eventLabel?: string, eventValue?: number): void;
-    trackPageView(): void;
-    trackScreenView(): void;
+    trackPageView(path?: string, url?: string, title?: string): void;
+    trackScreenView(screenName: string): void;
+    trackSocialInteraction(network: string, action: string, target: string): void;
+    setUserTiming(category: string, variable: string, timeMs: number, label?: string): void;
+    trackException(description: string, fatal?: boolean): void;
+    setCustomDimension(dimensionIndex: number, value: string): void;
+    setCustomMetric(metricIndex: number, value: number): void;
     setClientId(): void;
     setUserId(): void;
     startSession(): void;
@@ -92,7 +101,6 @@ export declare class GoogleAnalytics {
     setSocialNetwork(socialNetwork: string): void;
     setSocialAction(socialAction: string): void;
     setSocialActionTarget(socialActionTarget: string): void;
-    setUserTiming(timingCategory: string, timingVariable: string, timingTimeMs: number, timingLabel?: string): void;
     setPageLoadTime(pageLoadTimeMs: number): void;
     setDNSLookupTime(dnsLookupTimeMs: number): void;
     setPageDownloadTime(downloadTimeMs: number): void;
@@ -101,9 +109,6 @@ export declare class GoogleAnalytics {
     setServerResponseTime(serverResponseTimeMs: number): void;
     setDOMInteractiveTime(domInteractiveTimeMs: number): void;
     setContentLoadTime(contentLoadTimeMs: number): void;
-    setException(exceptionDescription: string, isFatal?: boolean): void;
-    setCustomDimension(dimensionIndex: number, value: string): void;
-    setCustomMetric(metricIndex: number, value: number): void;
     setContentExperiment(experimentId: string, experimentVariant: string): void;
 }
 export {};

@@ -1,5 +1,6 @@
 const path = require("path");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 module.exports = {
     entry: {
         'wut': './src/index.ts',
@@ -27,5 +28,38 @@ module.exports = {
             loader: 'ts-loader',
             exclude: /node_modules/
         }]
+    },
+    optimization: {
+        minimizer: [
+            new TerserPlugin({
+                chunkFilter: (chunk) => {
+                    return chunk.name === 'wut.min';
+                },
+                cache: true,
+                parallel: true,
+                sourceMap: true,
+                terserOptions: {
+                    parse: {
+                        ecma: 8
+                    },
+                    compress: {
+                        ecma: 5,
+                        warnings: false,
+                        comparisons: false,
+                        unsafe: true,
+                        drop_console: true,
+                        toplevel: true
+                    },
+                    mangle: {
+                        safari10: true
+                    },
+                    output: {
+                        ecma: 5,
+                        comments: false,
+                        ascii_only: true
+                    },
+                },
+            }),
+        ],
     }
 };

@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "webpack --watch --progress --mode=development",
         "build": "webpack --mode=production",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -19,8 +19,16 @@
     },
     "homepage": "https://github.com/hising/wut.js#readme",
     "devDependencies": {
+        "@babel/core": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "@babel/preset-react": "^7.0.0",
+        "@babel/preset-typescript": "^7.3.3",
+        "@types/jest": "^24.0.11",
+        "babel-jest": "^24.5.0",
         "clean-webpack-plugin": "^2.0.0",
+        "jest": "^24.5.0",
         "prettier": "^1.16.4",
+        "terser-webpack-plugin": "^1.2.3",
         "ts-loader": "^5.3.3",
         "typescript": "^3.3.3333",
         "webpack": "^4.29.6",

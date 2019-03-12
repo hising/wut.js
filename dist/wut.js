@@ -91,50 +91,123 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ "./src/index.ts":
-/*!**********************!*\
-  !*** ./src/index.ts ***!
-  \**********************/
-/*! no static exports found */
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
 Object.defineProperty(exports, "__esModule", { value: true });
-var GoogleAnalytics_1 = __webpack_require__(/*! ./services/GoogleAnalytics */ "./src/services/GoogleAnalytics.ts");
-var Wut = /** @class */ (function () {
-    function Wut() {
-        this.wow = "a";
-        this.google = new GoogleAnalytics_1.GoogleAnalytics("fsdfsdfs");
-    }
-    return Wut;
-}());
-exports.Wut = Wut;
+__export(__webpack_require__(1));
 
 
 /***/ }),
-
-/***/ "./src/services/GoogleAnalytics.ts":
-/*!*****************************************!*\
-  !*** ./src/services/GoogleAnalytics.ts ***!
-  \*****************************************/
-/*! no static exports found */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var GaParams;
+(function (GaParams) {
+    GaParams["ProtocolVersion"] = "v";
+    GaParams["TrackingId"] = "tid";
+    GaParams["ClientId"] = "cid";
+    GaParams["HitType"] = "t";
+    GaParams["AnonymizeIP"] = "aip";
+    GaParams["DataSource"] = "ds";
+    GaParams["QueueTime"] = "qt";
+    GaParams["CacheBuster"] = "z";
+    GaParams["UserId"] = "uid";
+    GaParams["SessionControl"] = "sc";
+    GaParams["IPOverride"] = "uip";
+    GaParams["UserAgentOverride"] = "ua";
+    GaParams["GeoOverride"] = "geoid";
+    GaParams["DocumentReferrer"] = "dr";
+    GaParams["CampaignName"] = "cn";
+    GaParams["CampaignSource"] = "cs";
+    GaParams["CampaignMedium"] = "cm";
+    GaParams["CampaignKeyword"] = "ck";
+    GaParams["CampaignContent"] = "cc";
+    GaParams["CampaignId"] = "ci";
+    GaParams["GoogleAdsId"] = "gclid";
+    GaParams["GoogleDisplayAdsId"] = "dclid";
+    GaParams["ScreenResolution"] = "sr";
+    GaParams["ViewportSize"] = "vp";
+    GaParams["DocumentEncoding"] = "de";
+    GaParams["ScreenColors"] = "sd";
+    GaParams["UserLanguage"] = "ul";
+    GaParams["JavaEnabled"] = "je";
+    GaParams["FlashVersion"] = "fl";
+    GaParams["NonInteractionHit"] = "ni";
+    GaParams["DocumentLocationURL"] = "dl";
+    GaParams["DocumentHostName"] = "dh";
+    GaParams["DocumentPath"] = "dp";
+    GaParams["DocumentTitle"] = "dt";
+    GaParams["ScreenName"] = "cd";
+    GaParams["ContentGroup"] = "cg%d";
+    GaParams["LinkId"] = "linkid";
+    GaParams["ApplicationName"] = "an";
+    GaParams["ApplicationID"] = "aid";
+    GaParams["ApplicationVersion"] = "av";
+    GaParams["ApplicationInstallerID"] = "aiid";
+    GaParams["EventCategory"] = "ec";
+    GaParams["EventAction"] = "ea";
+    GaParams["EventLabel"] = "el";
+    GaParams["EventValue"] = "ev";
+    GaParams["TransactionID"] = "ti";
+    GaParams["TransactionAffiliation"] = "ta";
+    GaParams["TransactionRevenue"] = "tr";
+    GaParams["TransactionShipping"] = "ts";
+    GaParams["TransactionTax"] = "tt";
+    GaParams["ItemName"] = "in";
+    GaParams["ItemPrice"] = "ip";
+    GaParams["ItemQuantity"] = "iq";
+    GaParams["ItemCode"] = "ic";
+    GaParams["ItemCategory"] = "iv";
+    GaParams["ProductSKU"] = "pr%did";
+    GaParams["ProductName"] = "pr%dnm";
+    GaParams["ProductBrand"] = "pr%dbr";
+    GaParams["ProductCategory"] = "pr%dca";
+    GaParams["ProductVariant"] = "pr%dva";
+    GaParams["ProductPrice"] = "pr%dpr";
+    GaParams["ProductQuantity"] = "pr%dqt";
+    GaParams["ProductCouponCode"] = "pr%dcc";
+    GaParams["ProductPosition"] = "pr%dps";
+    GaParams["ProductCustomDimension"] = "pr%dcd%d";
+    GaParams["ProductCustomMetric"] = "pr%dcm%d";
+    GaParams["ProductAction"] = "pa";
+    GaParams["CouponCode"] = "tcc";
+    GaParams["ProductActionList"] = "pal";
+    GaParams["CheckoutStep"] = "cos";
+    GaParams["CheckoutStepOption"] = "col";
+    GaParams["ProductImpressionListName"] = "il%dnm";
+    GaParams["ProductImpressionSKU"] = "il%dpi%did";
+    GaParams["ProductImpressionName"] = "il<listIndex>pi<productIndex>nm";
+    GaParams["ProductImpressionBrand"] = "il<listIndex>pi<productIndex>br";
+    GaParams["ProductImpressionCategory"] = "il<listIndex>pi<productIndex>ca";
+    GaParams["ProductImpressionVariant"] = "il<listIndex>pi<productIndex>va";
+    GaParams["ProductImpressionPosition"] = "il<listIndex>pi<productIndex>ps";
+    GaParams["ProductImpressionPrice"] = "il<listIndex>pi<productIndex>pr";
+    GaParams["ProductImpressionCustomDimension"] = "il<listIndex>pi<productIndex>cd<dimensionIndex>";
+    GaParams["ProductImpressionCustomMetric"] = "il<listIndex>pi<productIndex>cm<metricIndex>";
+    GaParams["PromotionId"] = "";
+})(GaParams || (GaParams = {}));
+;
 var GoogleAnalytics = /** @class */ (function () {
     function GoogleAnalytics(trackingId) {
         this.trackingId = trackingId;
         this.clientId = "";
         this.params = {};
+        this.transient = {};
         this.protocolVersion = 1;
+        this.endpoint = "https://www.google-analytics.com/collect";
     }
     GoogleAnalytics.prototype.anonymizeIp = function (anonymize) {
         if (anonymize) {
@@ -144,13 +217,27 @@ var GoogleAnalytics = /** @class */ (function () {
             delete this.params.aip;
         }
     };
-    GoogleAnalytics.prototype.setCacheBuster = function () { };
+    GoogleAnalytics.prototype.send = function () {
+        // If POST - Payload no longer than 8192 bytes
+        // IF GET - encoded URL must be no longer than 8000 Bytes
+    };
+    GoogleAnalytics.prototype.setCacheBuster = function () {
+        this.transient[GaParams.CacheBuster] = Math.round(new Date().getTime() / 1000);
+    };
+    GoogleAnalytics.prototype.optOut = function (isOptOut) {
+    };
     GoogleAnalytics.prototype.trackEvent = function (eventCategory, eventAction, eventLabel, eventValue) { };
-    GoogleAnalytics.prototype.trackPageView = function () { };
-    GoogleAnalytics.prototype.trackScreenView = function () { };
+    GoogleAnalytics.prototype.trackPageView = function (path, url, title) { };
+    GoogleAnalytics.prototype.trackScreenView = function (screenName) { };
+    GoogleAnalytics.prototype.trackSocialInteraction = function (network, action, target) { };
+    GoogleAnalytics.prototype.setUserTiming = function (category, variable, timeMs, label) { };
+    GoogleAnalytics.prototype.trackException = function (description, fatal) { };
+    GoogleAnalytics.prototype.setCustomDimension = function (dimensionIndex, value) { };
+    GoogleAnalytics.prototype.setCustomMetric = function (metricIndex, value) { };
     GoogleAnalytics.prototype.setClientId = function () { };
     GoogleAnalytics.prototype.setUserId = function () { };
-    GoogleAnalytics.prototype.startSession = function () { };
+    GoogleAnalytics.prototype.startSession = function () {
+    };
     GoogleAnalytics.prototype.endSession = function () { };
     GoogleAnalytics.prototype.overrideIpAddress = function (ipAddress) { };
     GoogleAnalytics.prototype.overrideUserAgent = function (userAgent) { };
@@ -225,7 +312,6 @@ var GoogleAnalytics = /** @class */ (function () {
     GoogleAnalytics.prototype.setSocialNetwork = function (socialNetwork) { };
     GoogleAnalytics.prototype.setSocialAction = function (socialAction) { };
     GoogleAnalytics.prototype.setSocialActionTarget = function (socialActionTarget) { };
-    GoogleAnalytics.prototype.setUserTiming = function (timingCategory, timingVariable, timingTimeMs, timingLabel) { };
     GoogleAnalytics.prototype.setPageLoadTime = function (pageLoadTimeMs) { };
     GoogleAnalytics.prototype.setDNSLookupTime = function (dnsLookupTimeMs) { };
     GoogleAnalytics.prototype.setPageDownloadTime = function (downloadTimeMs) { };
@@ -234,9 +320,6 @@ var GoogleAnalytics = /** @class */ (function () {
     GoogleAnalytics.prototype.setServerResponseTime = function (serverResponseTimeMs) { };
     GoogleAnalytics.prototype.setDOMInteractiveTime = function (domInteractiveTimeMs) { };
     GoogleAnalytics.prototype.setContentLoadTime = function (contentLoadTimeMs) { };
-    GoogleAnalytics.prototype.setException = function (exceptionDescription, isFatal) { };
-    GoogleAnalytics.prototype.setCustomDimension = function (dimensionIndex, value) { };
-    GoogleAnalytics.prototype.setCustomMetric = function (metricIndex, value) { };
     GoogleAnalytics.prototype.setContentExperiment = function (experimentId, experimentVariant) { };
     return GoogleAnalytics;
 }());
@@ -244,7 +327,6 @@ exports.GoogleAnalytics = GoogleAnalytics;
 
 
 /***/ })
-
-/******/ });
+/******/ ]);
 });
 //# sourceMappingURL=wut.js.map
