@@ -1,10 +1,10 @@
 import {HttpClient} from "../http/client";
 
-interface GoogleAnalyticsParam {
+interface IGoogleAnalyticsParam {
     [key: string]: any;
 }
 
-interface ViewArea {
+interface IViewArea {
     width: number;
     height: number;
 }
@@ -30,7 +30,6 @@ type ProductAction =
     | "checkout_option"
     | "purchase"
     | "refund";
-
 
 enum GaParams {
     ProtocolVersion = "v",
@@ -115,7 +114,7 @@ enum GaParams {
     ProductImpressionCustomDimension = "il%dpi%dcd%d",
     ProductImpressionCustomMetric = "il%dpi%dcm%d",
     PromotionId = ""
-};
+}
 
 export class GoogleAnalytics {
     get trackingId(): string {
@@ -134,8 +133,8 @@ export class GoogleAnalytics {
     }
     private _trackingId: string;
     private _protocolVersion: number;
-    private readonly params: GoogleAnalyticsParam;
-    private readonly transient: GoogleAnalyticsParam;
+    private readonly params: IGoogleAnalyticsParam;
+    private readonly transient: IGoogleAnalyticsParam;
     private clientId: string;
     private endpoint: string;
     private client: HttpClient;
@@ -226,8 +225,8 @@ export class GoogleAnalytics {
     public setGoogleAdsId(googleAdsId: string) {}
     public setGoogleDisplayAdsId(googleDisplayAdsId: string) {}
 
-    public setScreenResolution(screenResolution: ViewArea) {}
-    public setViewportSize(viewportSize: ViewArea) {}
+    public setScreenResolution(screenResolution: IViewArea) {}
+    public setViewportSize(viewportSize: IViewArea) {}
     public setDocumentEncoding(documentEncoding: string) {}
     public setScreenColors(screenColors: string) {}
     public setUserLanguage(userLanguage: string) {}

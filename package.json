@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "webpack --watch --progress --mode=development",
         "build": "webpack --mode=production",
-        "test": "jest"
+        "test": "jest",
+        "tslint": "tslint -c tslint.json 'src/**/*.ts'"
     },
     "repository": {
         "type": "git",
@@ -30,6 +31,7 @@
         "prettier": "^1.16.4",
         "terser-webpack-plugin": "^1.2.3",
         "ts-loader": "^5.3.3",
+        "tslint": "^5.13.1",
         "typescript": "^3.3.3333",
         "webpack": "^4.29.6",
         "webpack-cli": "^3.2.3"
