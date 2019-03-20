@@ -1,4 +1,4 @@
-import {encode, paramEncode, sprintf} from "../src/utils";
+import {encode, merge, paramEncode, sprintf} from "../src/utils";
 
 test("encodes a javascript object to querystring", () => {
     let params = {
@@ -36,6 +36,22 @@ test("sprintf correctly formats a string", () => {
     let city = "Knivsta";
     let formatted = sprintf(str, name, city);
     expect(formatted).toBe("My name is Mattias. I am from Knivsta");
+});
+
+test("merge works as expected", () => {
+    let a = {"a": "a"};
+    let b = {"b": "b"};
+    let c = {"a": "b"};
+
+    let ab = merge(a, b);
+    let bc = merge(b, c);
+    let ac = merge(a, c);
+
+    expect(ab.a).toBe("a");
+    expect(ab.b).toBe("b");
+    expect(bc.b).toBe("b");
+    expect(bc.a).toBe("b");
+    expect(ac.a).toBe("b");
 });
 
 

@@ -1,154 +1,29 @@
 import {HttpClient} from "../http/client";
-
-interface IGoogleAnalyticsParam {
-    [key: string]: any;
-}
-
-interface IViewArea {
-    width: number;
-    height: number;
-}
-
-type HttpMethod = "post" | "get";
-
-type HitType =
-    | "pageview"
-    | "screenview"
-    | "event"
-    | "transaction"
-    | "item"
-    | "social"
-    | "exception"
-    | "timing";
-
-type ProductAction =
-    | "detail"
-    | "click"
-    | "add"
-    | "remove"
-    | "checkout"
-    | "checkout_option"
-    | "purchase"
-    | "refund";
-
-enum GaParams {
-    ProtocolVersion = "v",
-    TrackingId = "tid",
-    ClientId = "cid",
-    HitType = "t",
-    AnonymizeIP = "aip",
-    DataSource = "ds",
-    QueueTime = "qt",
-    CacheBuster = "z",
-    UserId = "uid",
-    SessionControl = "sc",
-    IPOverride = "uip",
-    UserAgentOverride = "ua",
-    GeoOverride = "geoid",
-    DocumentReferrer = "dr",
-    CampaignName = "cn",
-    CampaignSource = "cs",
-    CampaignMedium = "cm",
-    CampaignKeyword = "ck",
-    CampaignContent = "cc",
-    CampaignId = "ci",
-    GoogleAdsId = "gclid",
-    GoogleDisplayAdsId = "dclid",
-    ScreenResolution = "sr",
-    ViewportSize = "vp",
-    DocumentEncoding = "de",
-    ScreenColors = "sd",
-    UserLanguage = "ul",
-    JavaEnabled = "je",
-    FlashVersion = "fl",
-    NonInteractionHit = "ni",
-    DocumentLocationURL = "dl",
-    DocumentHostName = "dh",
-    DocumentPath = "dp",
-    DocumentTitle = "dt",
-    ScreenName = "cd",
-    ContentGroup = "cg%d",
-    LinkId = "linkid",
-    ApplicationName = "an",
-    ApplicationID = "aid",
-    ApplicationVersion = "av",
-    ApplicationInstallerID = "aiid",
-    EventCategory = "ec",
-    EventAction = "ea",
-    EventLabel = "el",
-    EventValue = "ev",
-    TransactionID = "ti",
-    TransactionAffiliation = "ta",
-    TransactionRevenue = "tr",
-    TransactionShipping = "ts",
-    TransactionTax = "tt",
-    ItemName = "in",
-    ItemPrice = "ip",
-    ItemQuantity = "iq",
-    ItemCode = "ic",
-    ItemCategory = "iv",
-    ProductSKU = "pr%did",
-    ProductName = "pr%dnm",
-    ProductBrand = "pr%dbr",
-    ProductCategory = "pr%dca",
-    ProductVariant = "pr%dva",
-    ProductPrice = "pr%dpr",
-    ProductQuantity = "pr%dqt",
-    ProductCouponCode = "pr%dcc",
-    ProductPosition = "pr%dps",
-    ProductCustomDimension = "pr%dcd%d",
-    ProductCustomMetric = "pr%dcm%d",
-    ProductAction = "pa",
-    CouponCode = "tcc",
-    ProductActionList = "pal",
-    CheckoutStep = "cos",
-    CheckoutStepOption = "col",
-    ProductImpressionListName = "il%dnm",
-    ProductImpressionSKU = "il%dpi%did",
-    ProductImpressionName = "il%dpi%dnm",
-    ProductImpressionBrand = "il%dpi%dbr",
-    ProductImpressionCategory = "il%dpi%dca",
-    ProductImpressionVariant = "il%dpi%dva",
-    ProductImpressionPosition = "il%dpi%dps",
-    ProductImpressionPrice = "il%dpi%dpr",
-    ProductImpressionCustomDimension = "il%dpi%dcd%d",
-    ProductImpressionCustomMetric = "il%dpi%dcm%d",
-    PromotionId = ""
-}
+import {GaParams, HitType, HttpMethod, IGoogleAnalyticsParam, IViewArea, ProductAction} from "../constants/google";
 
 export class GoogleAnalytics {
-    get trackingId(): string {
-        return this._trackingId;
-    }
-
-    set trackingId(value: string) {
-        this._trackingId = value;
-    }
-    get protocolVersion(): number {
-        return this._protocolVersion;
-    }
-
-    set protocolVersion(value: number) {
-        this._protocolVersion = value;
-    }
     private _trackingId: string;
     private _protocolVersion: number;
     private readonly params: IGoogleAnalyticsParam;
-    private readonly transient: IGoogleAnalyticsParam;
-    private clientId: string;
+    private _transient: IGoogleAnalyticsParam;
+    private _lastTracked: IGoogleAnalyticsParam;
     private endpoint: string;
     private client: HttpClient;
     private method: HttpMethod;
+    private _enableTracking: boolean;
 
     constructor(trackingId: string) {
         this._trackingId = trackingId;
-        this.clientId = "";
-        this.params = {};
-        this.transient = {};
+        this.params = {
+            [GaParams.ClientId]: ""
+        };
+        this._transient = {};
         this._protocolVersion = 1;
         this.endpoint = "https://www.google-analytics.com/collect";
         this.client = new HttpClient();
         this.method = "post";
+        this._enableTracking = true;
+        this._lastTracked = {};
 
         this.params = {
             [GaParams.TrackingId]: trackingId,
@@ -170,11 +45,11 @@ export class GoogleAnalytics {
     }
 
     public setCacheBuster() {
-        this.transient[GaParams.CacheBuster] = Math.round(new Date().getTime() / 1000);
+        this._transient[GaParams.CacheBuster] = Math.round(new Date().getTime() / 1000);
     }
 
     public optOut(isOptOut: boolean) {
-
+        this._enableTracking = !isOptOut;
     }
 
     public trackEvent(
@@ -182,34 +57,115 @@ export class GoogleAnalytics {
         eventAction: string,
         eventLabel?: string,
         eventValue?: number
-    ) {}
+    ) {
+        let params = {
+            [GaParams.EventCategory]: eventCategory,
+            [GaParams.EventAction]: eventAction
+        };
 
-    public trackPageView(path?: string, url?: string, title?: string) {}
+        if (eventLabel) {
+            params[GaParams.EventLabel] = eventLabel;
+        }
 
-    public trackScreenView(screenName: string) {}
+        if (eventValue) {
+            params[GaParams.EventValue] = eventValue;
+        }
+
+        this.track("event", params);
+    }
+
+    public trackPageView(path?: string, url?: string, title?: string) {
+        const params = {};
+
+        if (path) {
+            params[GaParams.DocumentPath] = path;
+        }
+
+        if (url) {
+            params[GaParams.DocumentLocationURL] = url;
+        }
+
+        if (title) {
+            params[GaParams.DocumentTitle] = title;
+        }
+
+        this.track("pageview", params);
+    }
+
+    public trackScreenView(screenName: string) {
+        const params = {
+            [GaParams.ScreenName]: screenName
+        };
+        this.track("screenview", params);
+    }
     public trackSocialInteraction(
         network: string,
         action: string,
         target: string
-    ) {}
+    ) {
+        const params = {
+            [GaParams.SocialNetwork]: network,
+            [GaParams.SocialAction]: action,
+            [GaParams.SocialActionTarget]: target
+        };
+        this.track("social", params);
+    }
+
     public setUserTiming(
         category: string,
         variable: string,
         timeMs: number,
         label?: string
-    ) {}
-    public trackException(description: string, fatal?: boolean) {}
+    ) {
+        const params = {
+            [GaParams.UserTimingCategory]: category,
+            [GaParams.UserTimingVariableName]: variable,
+            [GaParams.UserTimingTime]: timeMs
+        };
 
-    public setCustomDimension(dimensionIndex: number, value: string) {}
-    public setCustomMetric(metricIndex: number, value: number) {}
+        if (label) {
+            params[GaParams.UserTimingLabel] = label;
+        }
 
-    public setClientId() {}
-    public setUserId() {}
+        this.track("timing", params);
+    }
+
+    public trackException(description: string, fatal?: boolean) {
+        const params = {
+            [GaParams.ExceptionDescription]: description
+        };
+
+        if (typeof fatal !== 'undefined') {
+            params[GaParams.IsExceptionFatal] = fatal
+        }
+
+        this.track("exception", params);
+    }
+
+    public setCustomDimension(dimensionIndex: number, value: string) {
+        const keyName = GaParams.CustomDimension.replace("%d", dimensionIndex);
+        this.transient[keyName] = value;
+    }
+    public setCustomMetric(metricIndex: number, value: number) {
+        const keyName = GaParams.CustomMetric.replace("%d", metricIndex);
+        this.transient[keyName] = value;
+    }
+
+    public setClientId(clientId: any) {
+        this.params[GaParams.ClientId] = clientId;
+    }
+
+    public setUserId(userId: any) {
+        this.params[GaParams.UserId] = userId;
+    }
 
     public startSession() {
-
+        this.transient[GaParams.SessionControl] = "start";
     }
-    public endSession() {}
+
+    public endSession() {
+        this.transient[GaParams.SessionControl] = "end";
+    }
 
     public overrideIpAddress(ipAddress: string) {}
     public overrideUserAgent(userAgent: string) {}
@@ -369,4 +325,60 @@ export class GoogleAnalytics {
         experimentId: string,
         experimentVariant: string
     ) {}
+
+    private track(eventType: HitType, params: any) {
+        if (!this._enableTracking) {
+            console.log("Tracking Disabled");
+            return;
+        }
+
+        const toTrack = this.mergeTransient(params);
+        this._lastTracked = {
+            [GaParams.HitType]: eventType,
+            ...toTrack
+        };
+
+        console.log(eventType, this.mergeTransient(params));
+    }
+
+    private mergeTransient(params: {}) {
+        let transient = this.getTransientAndDelete();
+        return {...this.params, ...params, ...transient};
+    }
+
+    private getTransientAndDelete() {
+        const transient = this._transient;
+        this._transient = {};
+        return transient;
+    }
+
+    get transient(): IGoogleAnalyticsParam {
+        return this._transient;
+    }
+
+    set transient(value: IGoogleAnalyticsParam) {
+        this._transient = value;
+    }
+    get trackingId(): string {
+        return this._trackingId;
+    }
+
+    set trackingId(value: string) {
+        this._trackingId = value;
+    }
+    get protocolVersion(): number {
+        return this._protocolVersion;
+    }
+
+    set protocolVersion(value: number) {
+        this._protocolVersion = value;
+    }
+
+    get enableTracking(): boolean {
+        return this._enableTracking;
+    }
+
+    get lastTracked(): IGoogleAnalyticsParam {
+        return this._lastTracked;
+    }
 }

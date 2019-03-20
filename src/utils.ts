@@ -1,8 +1,10 @@
-export const sprintf = (...args: any) => {
+export const sprintf = (...args: any[]) => {
     return args.shift().replace(/%s/g, () => {
         return args.shift();
     });
 };
+
+export const merge = (mergeA: any, mergeB: any) => ({...mergeA, ...mergeB});
 
 export const paramEncode = (paramValue: any) => {
     if (Array.isArray(paramValue)) {
