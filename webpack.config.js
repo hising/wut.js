@@ -1,6 +1,7 @@
 const path = require("path");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 module.exports = {
     entry: {
         'wut': './src/index.ts',
@@ -21,6 +22,7 @@ module.exports = {
         new CleanWebpackPlugin({
             verbose: true
         }),
+        new CompressionPlugin()
     ],
     module: {
         rules: [{

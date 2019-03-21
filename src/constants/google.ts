@@ -1,5 +1,5 @@
 // Based on https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
-export enum GaParams {
+export enum GaProps {
     ProtocolVersion = "v",
     TrackingId = "tid",
     ClientId = "cid",
@@ -95,6 +95,13 @@ export enum GaParams {
     CustomMetric = "cm%d"
 }
 
+export interface IGoogleParams {
+    clientId?: string;
+    userId?: string;
+    protocolVersion?: number;
+    includePerformance?: boolean;
+}
+
 export interface IGoogleAnalyticsParam {
     [key: string]: any;
 }
@@ -102,6 +109,15 @@ export interface IGoogleAnalyticsParam {
 export interface IViewArea {
     width: number;
     height: number;
+}
+
+export class ICampaignData {
+    public name?: string;
+    public source?: string;
+    public medium?: string;
+    public keyword?: string;
+    public content?: string;
+    public id?: string;
 }
 
 export type HttpMethod = "post" | "get";

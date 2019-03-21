@@ -1,6 +1,9 @@
 import {GoogleAnalytics} from "../src";
-import {GaParams} from "../src/constants/google";
+import {GaProps} from "../src/constants/google";
 const google = new GoogleAnalytics("ua-1111111");
+const ipAddress = "127.0.0.1";
+const geoId = "geoid";
+const userAgent = "Wut.js User-Agent";
 
 test("initialize google analytics correctly", () => {
     expect(google.trackingId).toBe("ua-1111111");
@@ -9,7 +12,6 @@ test("initialize google analytics correctly", () => {
 
 test("google user should be able to anonymize ip", () => {
     google.anonymizeIp(true);
-    expect(google.an)
 });
 
 test("google should be able to track an event correctly", () => {
@@ -67,18 +69,44 @@ test("google should be able to set client and user id", () => {
     google.setUserId("User-1");
     google.setClientId("Client-1");
     google.trackEvent("Event", "Wow");
-    expect(google.lastTracked).toHaveProperty(GaParams.UserId);
-    expect(google.lastTracked).toHaveProperty(GaParams.ClientId);
+    expect(google.lastTracked).toHaveProperty(GaProps.UserId);
+    expect(google.lastTracked).toHaveProperty(GaProps.ClientId);
 });
 
 test("google should be able to start and end session", () => {
     google.startSession();
-    google.trackEvent("Event", "Wow");
-    expect(google.lastTracked).toHaveProperty(GaParams.SessionControl);
-    expect(google.lastTracked[GaParams.SessionControl]).toBe("start");
+    google.trackEvent("Event", "SessionStart");
+    expect(google.lastTracked).toHaveProperty(GaProps.SessionControl);
+    expect(google.lastTracked[GaProps.SessionControl]).toBe("start");
     google.endSession();
+    google.trackEvent("Event", "SessionEnd");
+    expect(google.lastTracked).toHaveProperty(GaProps.SessionControl);
+    expect(google.lastTracked[GaProps.SessionControl]).toBe("end");
+});
+
+test("google should be able to override ip, userAgent and geo", () => {
+    google.overrideIpAddress(ipAddress);
+    google.overrideUserAgent(userAgent);
+    google.overrideGeo(geoId);
+
     google.trackEvent("Event", "Wow");
-    expect(google.lastTracked).toHaveProperty(GaParams.SessionControl);
-    expect(google.lastTracked[GaParams.SessionControl]).toBe("end");
+
+    expect(google.lastTracked[GaProps.GeoOverride]).toBe(geoId);
+    expect(google.lastTracked[GaProps.UserAgentOverride]).toBe(userAgent);
+    expect(google.lastTracked[GaProps.IPOverride]).toBe(ipAddress);
+});
+
+test("google should be able to set referrer", () => {
+    google.setReferrer("http://referrer.com");
+    google.trackPageView("/my-page");
+    expect(google.lastTracked[GaProps.DocumentReferrer]).toBe("http://referrer.com");
+});
+
+test("google should be able to handle campaign settings", () => {
+    google.setCampaignData({
+        name: "MyCampaign",
+        source: "Facebook"
+    });
+    google.trackEvent("Event", "Wow");
 });
 
