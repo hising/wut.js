@@ -21,9 +21,12 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
+      - run: # run tests
+          name: Prettier
+          command: npm run prettier
       - run:
-          name: test
+          name: Jest
           command: npm test
       - run: # run tests
-          name: lint
+          name: Tslint
           command: npm run tslint

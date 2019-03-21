@@ -7,7 +7,8 @@
         "dev": "webpack --watch --progress --mode=development",
         "build": "webpack --mode=production",
         "test": "jest",
-        "tslint": "tslint -c tslint.json 'src/**/*.ts'"
+        "tslint": "tslint -c tslint.json 'src/**/*.ts'",
+        "prettier": "prettier --check 'src/**/*.ts'"
     },
     "repository": {
         "type": "git",

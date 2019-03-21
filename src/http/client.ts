@@ -1,7 +1,5 @@
 export class HttpClient {
-    constructor(settings: any = {}) {
-
-    }
+    constructor(settings: any = {}) {}
 
     public async get(url: string) {
         try {
@@ -10,7 +8,6 @@ export class HttpClient {
             console.error(`Error getting ${url}`, error);
             return null;
         }
-
     }
     public async post(url: string, params: any = {}) {
         const fetchSettings = {
@@ -23,6 +20,5 @@ export class HttpClient {
             console.error(`Error posting to ${url}`, error);
             return null;
         }
-
     }
 }

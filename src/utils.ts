@@ -8,9 +8,14 @@ export const merge = (mergeA: any, mergeB: any) => ({...mergeA, ...mergeB});
 
 export const paramEncode = (paramValue: any) => {
     if (Array.isArray(paramValue)) {
-        paramValue = "[" + paramValue.map((val: any) => {
-            return encodeURIComponent(val);
-        }).join(",") + "]";
+        paramValue =
+            "[" +
+            paramValue
+                .map((val: any) => {
+                    return encodeURIComponent(val);
+                })
+                .join(",") +
+            "]";
     } else {
         paramValue = encodeURIComponent(paramValue);
     }
