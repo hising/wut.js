@@ -244,7 +244,6 @@ export class GoogleAnalytics {
 
     private track(hitType: HitType, params: any) {
         if (!this._enableTracking) {
-            console.log("Tracking Disabled");
             return;
         }
 
@@ -254,7 +253,7 @@ export class GoogleAnalytics {
             ...toTrack
         };
 
-        console.log(this._lastTracked);
+        // console.log(this._lastTracked);
     }
 
     private mergeTransient(hitType: HitType, params: {}) {
